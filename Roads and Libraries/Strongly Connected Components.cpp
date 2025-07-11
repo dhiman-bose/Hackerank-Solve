@@ -6,18 +6,18 @@ string ltrim(const string &);
 string rtrim(const string &);
 vector<string> split(const string &);
 
-void dfs(int v, vector<vector<int>> const& adj, vector<int> &order,vector<bool> &visited) {
+void dfs(int v, vector<vector<int>> const& adj, stack<int> &order,vector<bool> &visited) {
     visited[v] = true;
-   
+    order.push(v);
     for (auto u : adj[v])
         {if (!visited[u])
             dfs(u, adj, order,visited);}
-    order.push_back(v);
+    
 }
 long roadsAndLibraries(int n, int c_lib, int c_road, vector<vector<int>> cities) {
     vector<vector<int>> adj(n+1);
-    vector<vector<int>>components;
-    vector<int> order;
+    vector<stack<int>>components;
+    stack<int> order;
     vector<bool> visited;
     visited.assign(n+1, false);
     long total_cost=0;
@@ -31,20 +31,18 @@ long roadsAndLibraries(int n, int c_lib, int c_road, vector<vector<int>> cities)
         {if (!visited[v])dfs(v, adj, order,visited);}
     visited.assign(n+1, false);
     
-    reverse(order.begin(), order.end());
-    
-    for (auto v : order){
-        if (v && !visited[v]) {
-            std::vector<int> component;
+
+   //Running the Second DFS 
+    while(!order.empty()){int v=order.top(); order.pop();
+       
+       if (v && !visited[v]) {
+            std::stack<int> component;
             dfs(v, adj, component,visited);
-            components.push_back(component);
-            
-        }}
+            components.push_back(component);}}
     
     
-   
-   
-    
+//Now we have got the strongly connected components in "components" list.    
+//Now calculating the minimal cost for our problem   
 for (auto& comp : components) {
     int m=comp.size();
     if(c_lib<c_road)
