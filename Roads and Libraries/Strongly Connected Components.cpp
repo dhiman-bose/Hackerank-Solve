@@ -6,50 +6,44 @@ string ltrim(const string &);
 string rtrim(const string &);
 vector<string> split(const string &);
 
-void dfs(int v, vector<vector<int>> const& adj, vector<int> &output,vector<bool> &visited) {
+void dfs(int v, vector<vector<int>> const& adj, vector<int> &order,vector<bool> &visited) {
     visited[v] = true;
    
     for (auto u : adj[v])
         {if (!visited[u])
-            dfs(u, adj, output,visited);}
-    output.push_back(v);
+            dfs(u, adj, order,visited);}
+    order.push_back(v);
 }
 long roadsAndLibraries(int n, int c_lib, int c_road, vector<vector<int>> cities) {
     vector<vector<int>> adj(n+1);
     vector<vector<int>>components;
-    vector<vector<int>> adj_cond;
     vector<int> order;
     vector<bool> visited;
     visited.assign(n+1, false);
     long total_cost=0;
-    
+    //Building adjacency matrix graph
     for(auto& road:cities){
        adj[road[0]].push_back(road[1]);
-       adj[road[1]].push_back(road[0]);
+       adj[road[1]].push_back(road[0]);}
     
-    }
+    //Running the First DFS
     for (int v = 1; v <= n; v++)
-        {if (!visited[v])
-            dfs(v, adj, order,visited);}
-    
+        {if (!visited[v])dfs(v, adj, order,visited);}
     visited.assign(n+1, false);
     
     reverse(order.begin(), order.end());
-    vector<int> roots(n+1, 0);
+    
     for (auto v : order){
         if (v && !visited[v]) {
             std::vector<int> component;
             dfs(v, adj, component,visited);
             components.push_back(component);
-            int root = *min_element(begin(component), end(component));
             
-            for (auto u : component)
-                roots[u] = root;
         }}
-  
+    
     
    
-    //cout << "SCCs:" << endl;
+   
     
 for (auto& comp : components) {
     int m=comp.size();
