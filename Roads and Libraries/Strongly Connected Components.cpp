@@ -46,11 +46,7 @@ long roadsAndLibraries(int n, int c_lib, int c_road, vector<vector<int>> cities)
             for (auto u : component)
                 roots[u] = root;
         }}
-    adj_cond.assign(n+1, {});
-    for (int v = 1; v <= n; v++)
-        for (auto u : adj[v])
-            if (roots[v] != roots[u])
-                adj_cond[roots[v]].push_back(roots[u]);
+  
     
    
     //cout << "SCCs:" << endl;
