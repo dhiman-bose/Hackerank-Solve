@@ -14,13 +14,14 @@ void dfs(int v, vector<vector<int>> const& adj, stack<int> &order,vector<bool> &
             dfs(u, adj, order,visited);}
     
 }
-long roadsAndLibraries(int n, int c_lib, int c_road, vector<vector<int>> cities) {
+
+vector<stack<int>> strongly_connected_components(int n, int c_lib, int c_road, vector<vector<int>> cities){
     vector<vector<int>> adj(n+1);
     vector<stack<int>>components;
     stack<int> order;
     vector<bool> visited;
     visited.assign(n+1, false);
-    long total_cost=0;
+   
     //Building adjacency matrix graph
     for(auto& road:cities){
        adj[road[0]].push_back(road[1]);
@@ -40,8 +41,17 @@ long roadsAndLibraries(int n, int c_lib, int c_road, vector<vector<int>> cities)
             dfs(v, adj, component,visited);
             components.push_back(component);}}
     
-    
+    return components;
 //Now we have got the strongly connected components in "components" list.    
+    
+    
+    
+}
+
+long roadsAndLibraries(int n, int c_lib, int c_road, vector<vector<int>> cities) {
+     long total_cost=0;
+    vector<stack<int>>components=strongly_connected_components(n, c_lib, c_road,cities);
+    
 //Now calculating the minimal cost for our problem   
 for (auto& comp : components) {
     int m=comp.size();
