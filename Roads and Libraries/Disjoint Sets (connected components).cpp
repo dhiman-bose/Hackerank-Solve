@@ -29,7 +29,7 @@ void union_sets(int a, int b,vector<int>& parent,vector<int>& size) {
             swap(a, b);
         parent[b] = a;
         size[a] += size[b];
-        size[b]=0;
+        size[b]=0; //since component b's all elements are merged/connected to a, so we set size of the previous b's component to zero
     }
 }
 
@@ -57,11 +57,6 @@ vector<int> disjoint_sets(int n, int c_lib, int c_road, vector<vector<int>> citi
     for(auto& road:cities){
         union_sets(road[0], road[1], parent, size);
     }
-   
-    
-    
-    
-    
   
     return size ;
 }
@@ -82,11 +77,7 @@ for (auto& comp : components) {
     }
     total_cost+= ((m-1)*c_road+c_lib);
     
-}
-
-    
-    
-    
+}  
 return total_cost;
 }
 
