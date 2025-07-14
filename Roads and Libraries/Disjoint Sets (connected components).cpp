@@ -11,8 +11,15 @@ vector<string> split(const string &);
 int find_set(int v,vector<int>& parent) {
     if (v == parent[v])
         return v;
-    return parent[v] = find_set(parent[v],parent);
-}
+    return parent[v] = find_set(parent[v],parent); 
+    /*
+    This line makes the paths for all those nodes shorter, 
+    by setting the parent of each visited vertex directly to root node.
+    This process first finds the representative of the set 
+    (root vertex), and then in the process of stack unwinding,
+    the visited nodes are attached directly to the representative.
+    */
+    }
 
 void union_sets(int a, int b,vector<int>& parent,vector<int>& size) {
     a = find_set(a,parent);
@@ -29,34 +36,34 @@ void union_sets(int a, int b,vector<int>& parent,vector<int>& size) {
 vector<int> disjoint_sets(int n, int c_lib, int c_road, vector<vector<int>> cities){
     vector<int> parent(n+1);
     iota(parent.begin(), parent.end(), 0);
-    //This code is for disjoin sets union by size. So we take a vector 
-    // named size and initialize its initial value as 1
-    vector<int> size(n+1,1);
-    //We can use rank in stead of size, if we want to use 
-    // union by rank in stead of union by size.
-    // Just declare any vector/list namely rank and initialize it 
-    // by assigning it any random value like 0,1 as initial rank value
+    /* This function does the same task as the following loop. 
+    for(int i=0;i<=n;i++) parent[i]=i;
+    This iota function takes a value (here zero=0),
+    and increments this value from parent.begin() and finishes before
+    parent.end() function. */
     
-    vector<int> freq(n+1,0);//Counting value to find size of every 
-    // connected component by root node index i.e. the index of root
-    //node contains the value of size of the component having the root
-    //This vector/list/array count or freq are redundant. size vector
-    //does the same function and stores the same value as this freq 
-    //vector. So this is redundant vector
+    
+    
+    vector<int> size(n+1,1); size[0]=0;//the zero index don't mean anything. So we have set it to zero.
+    /*
+    This code is for disjoin sets union by size. So we take a vector 
+    named size and initialize its initial value as 1.
+    We can use rank in stead of size, if we want to use 
+     union by rank in stead of union by size.
+    Just declare any vector/list namely rank and initialize it 
+    by assigning it any random value like 0,1 as initial rank value
+    */
+    
     for(auto& road:cities){
         union_sets(road[0], road[1], parent, size);
     }
    
-    for(int i=1;i<=n;i++){
-        
-        int elm=find_set(i,parent);
-        freq[elm]++;
-    } 
+    
     
     
     
   
-    return freq ;
+    return size ;
 }
 
 
