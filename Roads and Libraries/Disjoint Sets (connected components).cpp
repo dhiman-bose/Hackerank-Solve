@@ -8,15 +8,15 @@ vector<string> split(const string &);
 
 
 
-int find_set(int v,vector<int>& parent,map<int,int>& size) {
+int find_set(int v,vector<int>& parent) {
     if (v == parent[v])
         return v;
-    return parent[v] = find_set(parent[v],parent, size);
+    return parent[v] = find_set(parent[v],parent);
 }
 
-void union_sets(int a, int b,vector<int>& parent,map<int,int>& size) {
-    a = find_set(a,parent, size);
-    b = find_set(b,parent, size);
+void union_sets(int a, int b,vector<int>& parent,vector<int>& size) {
+    a = find_set(a,parent);
+    b = find_set(b,parent);
     if (a != b) {
         if (size[a] < size[b])
             swap(a, b);
@@ -29,25 +29,30 @@ void union_sets(int a, int b,vector<int>& parent,map<int,int>& size) {
 vector<int> disjoint_sets(int n, int c_lib, int c_road, vector<vector<int>> cities){
     vector<int> parent(n+1);
     iota(parent.begin(), parent.end(), 0);
-    map<int,int> size;
-    for(int i=1;i<=n;i++) size[i]=1;
-    vector<int> freq(n+1,0);
+    //This code is for disjoin sets union by size. So we take a vector 
+    // named size and initialize its initial value as 1
+    vector<int> size(n+1,1);
+    //We can use rank in stead of size, if we want to use 
+    // union by rank in stead of union by size.
+    // Just declare any vector/list namely rank and initialize it 
+    // by assigning it any random value like 0,1 as initial rank value
+    
+    vector<int> freq(n+1,0);//Counting value to find size of every 
+    // connected component by root node index i.e. the index of root
+    //node contains the value of size of the component having the root
+    //This vector/list/array count or freq are redundant. size vector
+    //does the same function and stores the same value as this freq 
+    //vector. So this is redundant vector
     for(auto& road:cities){
         union_sets(road[0], road[1], parent, size);
     }
-    // Compress the path for every node such that 
-    //every connected component has a rank/depth/height of atmost 1.
-    //No parent can have any grand children or no node has any grandparent
-    //Thus proper root for every connected component will be established
+   
     for(int i=1;i<=n;i++){
         
-        int m=find_set(i,parent, size);
-    } 
-    for(auto& elm:parent){
-        if(!elm)continue;
+        int elm=find_set(i,parent);
         freq[elm]++;
-        
-    }
+    } 
+    
     
     
   
